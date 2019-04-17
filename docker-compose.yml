@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  api:
+    build: ./api
+    command: bundle exec ruby app.rb -o 0.0.0.0
+    volumes:
+      - ./api:/api
+    ports:
+      - "4567:4567"
+      - "9876:9876"
+    tty: true
+    stdin_open: true
+  web:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - './client:/app'
+      - '/app/node_modules'
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
